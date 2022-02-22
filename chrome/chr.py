@@ -1,7 +1,10 @@
+import time
+
 from selenium import webdriver
 import selenium
 from selenium.webdriver.common.keys import Keys
 import chromedriver_autoinstaller
+from selenium.webdriver.remote.webelement import *
 
 import credentials
 
@@ -14,15 +17,21 @@ username_input=driver.find_element_by_id('username')
 username_input.clear()
 username_input.send_keys(credentials.usos_login)
 
-password_input =driver.find_element_by_id('password')
+password_input=driver.find_element_by_id('password')
 password_input.clear()
 password_input.send_keys(credentials.usos_password)
 
 driver.find_element_by_name('submit').click()
 
-driver.find_element_by_xpath("//input[@type='radio' and @value='1']").click()
+while True:
 
-driver.find_element_by_xpath("//input[@type='submit' and @value='Rejestruj']").click()
+    driver.find_element_by_xpath("//input[@type='radio' and @value='1']").click()
+
+    driver.find_element_by_xpath("//input[@type='submit' and @value='Rejestruj']").click()
+    if driver.find_element_by_id("confirmation_notice").get_attribute('style')!="display: none;":
+        break
+    time.sleep(5)
+    driver.refresh()
 
 input("end")
 
