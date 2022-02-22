@@ -3,6 +3,7 @@ from os.path import exists
 import webbrowser
 import json
 import credentials
+import time
 
 apihandler = USOSAPIConnection('https://apps.usos.pw.edu.pl/', credentials.customer_key,
                                credentials.secret_c_key)
@@ -55,8 +56,21 @@ req=apihandler.get('services/courses/course', course_id="6430-00000-000-0025")
 print(json.dumps(req,indent=2))
 
 print("\n-- Rejestracja --")
-req=apihandler.get('services/registrations/register', round_id="20498", course_id="6430-00000-000-0025", term_id="2022L", group_id="1")
-print(json.dumps(req,indent=2))
+no_runs=1
+while(True):
+    print('[{}] -> '.format(no_runs), end='')
+    try:
+        req=apihandler.get('services/registrations/register', round_id="20498", course_id="6430-00000-000-0025", term_id="2022L", group_id="1")
+        print(json.dumps(req,indent=2))
+        if not req:
+            print("Zarejestrowano!")
+            break
+    except Exception as e:
+        print(e.args[0])
+    finally:
+        time.sleep(5)
+    no_runs+=1
+
 
 
 print()
